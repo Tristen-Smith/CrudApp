@@ -44,6 +44,7 @@ function updateTable() {
             // json_result is an object. You can set a breakpoint, or print
             // it to see the fields. Specifically, it is an array of objects.
             // Here we loop the array and print the first name.
+            $('#datatable tbody tr').remove();
             for (let i = 0; i < json_result.length; i++) {
                 // Print the first name
                 console.log(json_result[i].first, json_result[i].last);
@@ -56,20 +57,22 @@ function updateTable() {
                     +htmlSafe(json_result[i].first)
                     +'</td><td>'
                     +htmlSafe(json_result[i].last)
-                    +'</td></tr>'
+                    +'</td><td>'
                     +htmlSafe(json_result[i].email)
-                    +'</td></tr>'
+                    +'</td><td>'
                     +formatPhoneNumber(htmlSafe(json_result[i].phone))
-                    +'</td></tr>'
+                    +'</td><td>'
                     +htmlSafe(bdayString)
                     +'</td></tr>');
+
+                console.log(json_result[i].email);
 
             }
             console.log("Done");
         }
     );
 
-}
+}-
 
 
 

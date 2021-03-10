@@ -87,6 +87,24 @@ function showDialogAdd(){
 
     $('#id').val("");
     $('#firstName').val("");
+
+    $('#firstName').removeClass("is-invalid");
+    $('#firstName').removeClass("is-valid");
+
+    $('#lastName').removeClass("is-invalid");
+    $('#lastName').removeClass("is-valid");
+
+    $('#email').removeClass("is-invalid");
+    $('#email').removeClass("is-valid");
+
+    $('#phone').removeClass("is-invalid");
+    $('#phone').removeClass("is-valid");
+
+    $('#birthday').removeClass("is-invalid");
+    $('#birthday').removeClass("is-valid");
+
+    $('#id').removeClass("is-invalid");
+    $('#id').removeClass("is-valid");
 }
 
 // There's a button in the form with the ID "addItem"
@@ -97,17 +115,64 @@ addItemButton.on("click", showDialogAdd);
 function saveChanges(){
     console.log("Save Changes");
     let firstName = $('#firstName').val();
+    let lastName = $('#lastName').val();
+    let email = $('#email').val();
+    let phone = $('#phone').val();
+    let birthday = $('#birthday').val();
     console.log("First name: " + firstName);
+    console.log("Last name: " + lastName);
+    console.log(" Email: " + email);
+    console.log("Phone Number: " + phone);
+    console.log("Birthday: " + birthday);
 
     let reg = /^[A-Za-z]{1,10}$/;
+    let reg1 = /^[A-Za-z]{1,15}[@][A-Za-z]{1,15}[.][A-Za-z]{1,15}$/;
+    let reg2 = /^[1-9]{3}[0-9]{3}[0-9]{4}$/;
+    let reg3 = /^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/;
+    let reg4 = /^[0-9]{1,10}$/;
 
     // Test the regular expression to see if there is a match
+    if (reg4.test(firstName)) {
+        $('#id').removeClass("is-invalid");
+        $('#id').addClass("is-valid");
+    } else {
+        $('#id').removeClass("is-valid");
+        $('#id').addClass("is-invalid");
+    }
     if (reg.test(firstName)) {
         $('#firstName').removeClass("is-invalid");
         $('#firstName').addClass("is-valid");
     } else {
         $('#firstName').removeClass("is-valid");
         $('#firstName').addClass("is-invalid");
+    }
+    if (reg.test(lastName)) {
+        $('#lastName').removeClass("is-invalid");
+        $('#lastName').addClass("is-valid");
+    } else {
+        $('#lastName').removeClass("is-valid");
+        $('#lastName').addClass("is-invalid");
+    }
+    if (reg1.test(email)) {
+        $('#email').removeClass("is-invalid");
+        $('#email').addClass("is-valid");
+    } else {
+        $('#email').removeClass("is-valid");
+        $('#email').addClass("is-invalid");
+    }
+    if (reg2.test(phone)) {
+        $('#phone').removeClass("is-invalid");
+        $('#phone').addClass("is-valid");
+    } else {
+        $('#phone').removeClass("is-valid");
+        $('#phone').addClass("is-invalid");
+    }
+    if (reg3.test(birthday)) {
+        $('#birthday').removeClass("is-invalid");
+        $('#birthday').addClass("is-valid");
+    } else {
+        $('#birthday').removeClass("is-valid");
+        $('#birthday').addClass("is-invalid");
     }
 }
 

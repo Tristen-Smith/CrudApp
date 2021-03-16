@@ -87,6 +87,10 @@ function showDialogAdd(){
 
     $('#id').val("");
     $('#firstName').val("");
+    $('#lastName').val("");
+    $('#email').val("");
+    $('#phone').val("");
+    $('#birthday').val("");
 
     $('#firstName').removeClass("is-invalid");
     $('#firstName').removeClass("is-valid");
@@ -132,7 +136,7 @@ function saveChanges(){
     let reg4 = /^[0-9]{1,10}$/;
 
     // Test the regular expression to see if there is a match
-    if (reg4.test(firstName)) {
+    if (reg4.test(id)) {
         $('#id').removeClass("is-invalid");
         $('#id').addClass("is-valid");
     } else {

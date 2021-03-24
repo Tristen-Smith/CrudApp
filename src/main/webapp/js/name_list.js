@@ -117,6 +117,7 @@ let addItemButton = $('#addItem');
 addItemButton.on("click", showDialogAdd);
 
 function saveChanges(){
+    let isValid = true;
     console.log("Save Changes");
     let firstName = $('#firstName').val();
     let lastName = $('#lastName').val();
@@ -131,24 +132,18 @@ function saveChanges(){
 
     let reg = /^[A-Za-z]{1,10}$/;
     let reg1 = /^[A-Za-z]{1,15}[@][A-Za-z]{1,15}[.][A-Za-z]{1,15}$/;
-    let reg2 = /^[1-9]{3}[0-9]{3}[0-9]{4}$/;
-    let reg3 = /^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/;
+    let reg2 = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    let reg3 = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
     let reg4 = /^[0-9]{1,10}$/;
 
     // Test the regular expression to see if there is a match
-    if (reg4.test(id)) {
-        $('#id').removeClass("is-invalid");
-        $('#id').addClass("is-valid");
-    } else {
-        $('#id').removeClass("is-valid");
-        $('#id').addClass("is-invalid");
-    }
     if (reg.test(firstName)) {
         $('#firstName').removeClass("is-invalid");
         $('#firstName').addClass("is-valid");
     } else {
         $('#firstName').removeClass("is-valid");
         $('#firstName').addClass("is-invalid");
+        isValid = false;
     }
     if (reg.test(lastName)) {
         $('#lastName').removeClass("is-invalid");
@@ -156,6 +151,7 @@ function saveChanges(){
     } else {
         $('#lastName').removeClass("is-valid");
         $('#lastName').addClass("is-invalid");
+        isValid = false;
     }
     if (reg1.test(email)) {
         $('#email').removeClass("is-invalid");
@@ -163,6 +159,7 @@ function saveChanges(){
     } else {
         $('#email').removeClass("is-valid");
         $('#email').addClass("is-invalid");
+        isValid = false;
     }
     if (reg2.test(phone)) {
         $('#phone').removeClass("is-invalid");
@@ -170,6 +167,7 @@ function saveChanges(){
     } else {
         $('#phone').removeClass("is-valid");
         $('#phone').addClass("is-invalid");
+        isValid = false;
     }
     if (reg3.test(birthday)) {
         $('#birthday').removeClass("is-invalid");
@@ -177,8 +175,32 @@ function saveChanges(){
     } else {
         $('#birthday').removeClass("is-valid");
         $('#birthday').addClass("is-invalid");
+        isValid = false;
     }
+    if (isValid) {
+        console.log("Valid form");
+        // Code to submit your form will go here.
+        let my_data = {first: firstName, last: lastName, email: email, phone: phone.replace(/\D/g, ''), birthday: birthday}
+
+        let url = "api/name_list_edit";
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(my_data),
+            success: function(dataFromServer) {
+                console.log(dataFromServer);
+                updateTable();
+                $('#myModal').modal('hide');
+            },
+            contentType: "application/json",
+            dataType: 'text' // Could be JSON or whatever too
+        });
+        console.log(my_data);
+    }
+    console.log(isValid);
 }
+
 
 let saveChangesButton = $('#saveChanges');
 saveChangesButton.on("click", saveChanges);

@@ -94,6 +94,44 @@ public class PersonDAO {
         }
         // Done! Return the results
         return list;
+
+
+    }
+    public static void addPerson(Person person){
+        // Declare our variables
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Get our database connection
+            conn = DBHelper.getConnection();
+
+            String sql = "INSERT INTO person (first , last, email, phone, birthday) VALUES (?, ?, ?, ?, ?)";
+
+//            String sql = "INSERT INTO person (first, last, email, phone, birthday) VALUES (?, 'test', 'test', 'test', '1999-02-01')";
+
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, person.getFirst());
+            stmt.setString(2, person.getLast());
+            stmt.setString(3, person.getEmail());
+            stmt.setString(4, person.getPhone());
+            stmt.setString(5, person.getBirthday());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        } finally {
+            try { if(stmt != null) stmt.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+
+            try { if(conn != null) conn.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
     }
 
 }

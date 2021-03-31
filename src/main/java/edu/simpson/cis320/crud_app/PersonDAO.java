@@ -109,8 +109,6 @@ public class PersonDAO {
 
             String sql = "INSERT INTO person (first , last, email, phone, birthday) VALUES (?, ?, ?, ?, ?)";
 
-//            String sql = "INSERT INTO person (first, last, email, phone, birthday) VALUES (?, 'test', 'test', 'test', '1999-02-01')";
-
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, person.getFirst());
@@ -118,6 +116,36 @@ public class PersonDAO {
             stmt.setString(3, person.getEmail());
             stmt.setString(4, person.getPhone());
             stmt.setString(5, person.getBirthday());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        } finally {
+            try { if(stmt != null) stmt.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+
+            try { if(conn != null) conn.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
+    }
+    public static void deletePerson(Person person){
+        // Declare our variables
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Get our database connection
+            conn = DBHelper.getConnection();
+
+            String sql = "delete from person where id = ?";
+
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, person.getId());
 
             stmt.executeUpdate();
 

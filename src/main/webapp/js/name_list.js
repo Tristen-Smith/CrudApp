@@ -63,16 +63,20 @@ function updateTable() {
                     +formatPhoneNumber(htmlSafe(json_result[i].phone))
                     +'</td><td>'
                     +htmlSafe(bdayString)
+                    + '<td>'
+                    + '<button type=\'button\' name=\'delete\' class=\'deleteButton btn btn-danger\' value=\''+json_result[i].id+'\'>'
+                    + 'Delete'
+                    + '</button>'
+                    + '</td>'
                     +'</td></tr>');
-
-                console.log(json_result[i].email);
-
             }
+            $(".deleteButton").on("click", deleteItem);
+
             console.log("Done");
         }
     );
 
-}-
+}
 
 
 
@@ -116,7 +120,7 @@ function showDialogAdd(){
 let addItemButton = $('#addItem');
 addItemButton.on("click", showDialogAdd);
 
-function saveChanges(){
+function saveChanges() {
     let isValid = true;
     console.log("Save Changes");
     let firstName = $('#firstName').val();
@@ -134,7 +138,6 @@ function saveChanges(){
     let reg1 = /^[A-Za-z]{1,15}[@][A-Za-z]{1,15}[.][A-Za-z]{1,15}$/;
     let reg2 = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
     let reg3 = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
-    let reg4 = /^[0-9]{1,10}$/;
 
     // Test the regular expression to see if there is a match
     if (reg.test(firstName)) {
@@ -180,7 +183,13 @@ function saveChanges(){
     if (isValid) {
         console.log("Valid form");
         // Code to submit your form will go here.
-        let my_data = {first: firstName, last: lastName, email: email, phone: phone.replace(/\D/g, ''), birthday: birthday}
+        let my_data = {
+            first: firstName,
+            last: lastName,
+            email: email,
+            phone: phone.replace(/\D/g, ''),
+            birthday: birthday
+        }
 
         let url = "api/name_list_edit";
 
@@ -188,7 +197,7 @@ function saveChanges(){
             type: 'POST',
             url: url,
             data: JSON.stringify(my_data),
-            success: function(dataFromServer) {
+            success: function (dataFromServer) {
                 console.log(dataFromServer);
                 updateTable();
                 $('#myModal').modal('hide');
@@ -197,10 +206,30 @@ function saveChanges(){
             dataType: 'text' // Could be JSON or whatever too
         });
         console.log(my_data);
+        }
+        console.log(isValid);
     }
-    console.log(isValid);
-}
 
 
 let saveChangesButton = $('#saveChanges');
 saveChangesButton.on("click", saveChanges);
+
+function deleteItem(e) {
+    console.log("Delete");
+    console.log(e.target.value);
+
+    let url = "api/name_list_delete";
+    let dataToServer = { id: e.target.value };
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: JSON.stringify(dataToServer),
+        success: function(dataFromServer) {
+            updateTable();
+            console.log(dataFromServer);
+        },
+        contentType: "application/json",
+        dataType: 'text'
+    });
+}

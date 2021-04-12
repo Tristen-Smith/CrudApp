@@ -23,7 +23,7 @@ public class NameListEdit extends HttpServlet {
     public NameListEdit(){
         namePattern = Pattern.compile("^[A-Za-z]{1,10}$");
         emailPattern = Pattern.compile("^[A-Za-z]{1,15}[@][A-Za-z]{1,15}[.][A-Za-z]{1,15}$");
-        phonePattern = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
+        phonePattern = Pattern.compile("^[0-9]{3}[0-9]{3}[0-9]{4}$");
         birthdayPattern = Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
     }
 
@@ -58,8 +58,6 @@ public class NameListEdit extends HttpServlet {
         // we'll keep things simple.
         out.println("Object test: "+ person.getFirst() + ", "  + person.getLast() + ", " + person.getEmail() + ", " + person.getPhone() + ", " + person.getBirthday());
 
-        PersonDAO.addPerson(person);
-
         Matcher firstNameM = namePattern.matcher(person.getFirst());
         if (!firstNameM.find( )) {
             out.println("{\"error\" : \"Error validating first name.\"}");
@@ -90,6 +88,7 @@ public class NameListEdit extends HttpServlet {
             return;
         }
         out.println("{\"success\": \"Successful insert.\"}");
+        PersonDAO.addPerson(person);
     }
 
 }

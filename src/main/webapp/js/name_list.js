@@ -64,12 +64,16 @@ function updateTable() {
                     +'</td><td>'
                     +htmlSafe(bdayString)
                     + '<td>'
+                    + '<button type=\'button\' name=\'edit\' class=\'editButton btn btn-primary\' value=\''+ json_result[i].id +'\'>'
+                    + 'Edit'
+                    + '</button>'
                     + '<button type=\'button\' name=\'delete\' class=\'deleteButton btn btn-danger\' value=\''+json_result[i].id+'\'>'
                     + 'Delete'
                     + '</button>'
                     + '</td>'
                     +'</td></tr>');
             }
+            $(".editButton").on("click", editItem);
             $(".deleteButton").on("click", deleteItem);
 
             console.log("Done");
@@ -123,6 +127,7 @@ addItemButton.on("click", showDialogAdd);
 function saveChanges() {
     let isValid = true;
     console.log("Save Changes");
+    let id = $('#id').val();
     let firstName = $('#firstName').val();
     let lastName = $('#lastName').val();
     let email = $('#email').val();
@@ -183,12 +188,27 @@ function saveChanges() {
     if (isValid) {
         console.log("Valid form");
         // Code to submit your form will go here.
-        let my_data = {
-            first: firstName,
-            last: lastName,
-            email: email,
-            phone: phone.replace(/\D/g, ''),
-            birthday: birthday
+        let my_data;
+        if(id === ""){
+            my_data = {
+                first: firstName,
+                last: lastName,
+                email: email,
+                phone: phone.replace(/\D/g, ''),
+                birthday: birthday
+            };
+            console.log("test");
+        }
+        else{
+            my_data = {
+                id: id,
+                first: firstName,
+                last: lastName,
+                email: email,
+                phone: phone.replace(/\D/g, ''),
+                birthday: birthday
+            };
+            console.log("else");
         }
 
         let url = "api/name_list_edit";
@@ -232,4 +252,60 @@ function deleteItem(e) {
         contentType: "application/json",
         dataType: 'text'
     });
+}
+
+function editItem(e) {
+    console.debug("Edit");
+    console.debug("Edit: " + e.target.value);
+
+    // Grab the id from the event
+    let id = e.target.value;
+
+// This next line is fun.
+// "e" is the event of the mouse click
+// "e.target" is what the user clicked on. The button in this case.
+// "e.target.parentNode" is the node that holds the button. In this case, the table cell.
+// "e.target.parentNode.parentNode" is the parent of the table cell. In this case, the table row.
+// "e.target.parentNode.parentNode.querySelectorAll("td")" gets an array of all matching table cells in the row
+// "e.target.parentNode.parentNode.querySelectorAll("td")[0]" is the first cell. (You can grab cells 0, 1, 2, etc.)
+// "e.target.parentNode.parentNode.querySelectorAll("td")[0].innerHTML" is content of that cell. Like "Sam" for example.
+// How did I find this long chain? Just by setting a breakpoint and using the interactive shell in my browser.
+    let first = e.target.parentNode.parentNode.querySelectorAll("td")[0].innerHTML;
+    let last = e.target.parentNode.parentNode.querySelectorAll("td")[1].innerHTML;
+    let email = e.target.parentNode.parentNode.querySelectorAll("td")[2].innerHTML;
+    let phone = e.target.parentNode.parentNode.querySelectorAll("td")[3].innerHTML;
+    let birthday = e.target.parentNode.parentNode.querySelectorAll("td")[4].innerHTML;
+// repeat line above for all the fields we need
+
+    $('#id').val(id); // Yes, now we set and use the hidden ID field
+    $('#firstName').val(first);
+    $('#lastName').val(last);
+    $('#email').val(email);
+
+// Etc
+
+// Show the window
+    $('#myModal').modal('show');
+
+// Regular expression to match phone number pattern:
+// (515) 555-1212
+    let regexp = /\((\d{3})\) (\d{3})-(\d{4})/;
+    let match = phone.match(regexp);
+// Log what we matched
+    console.log("Matches:");
+    console.log(match);
+// We how have a list, 1-3, where each one is part of the phone number.
+// Reformat into 515-555-1212
+    let phoneString = match[1] + '-' + match[2] + '-' + match[3];
+        $('#phone').val(phoneString);
+
+// Parse date to current time in milliseconds
+    let timestamp = Date.parse(birthday);
+// Made date object out of that time
+    let dateObject = new Date(timestamp);
+// Convert to a full ISO formatted string
+    let fullDateString = dateObject.toISOString();
+// Trim off the time part
+    let shortDateString = fullDateString.split('T')[0];
+    $('#birthday').val(shortDateString);
 }

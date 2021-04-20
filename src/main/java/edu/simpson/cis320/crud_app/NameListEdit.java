@@ -88,7 +88,13 @@ public class NameListEdit extends HttpServlet {
             return;
         }
         out.println("{\"success\": \"Successful insert.\"}");
-        PersonDAO.addPerson(person);
+
+        if(person.getId() == 0){
+            PersonDAO.addPerson(person);
+        }
+        else{
+            PersonDAO.updatePerson(person);
+        }
     }
 
 }

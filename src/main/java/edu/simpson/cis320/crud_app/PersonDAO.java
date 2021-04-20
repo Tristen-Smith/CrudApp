@@ -135,7 +135,6 @@ public class PersonDAO {
         // Declare our variables
         Connection conn = null;
         PreparedStatement stmt = null;
-        ResultSet rs = null;
 
         try {
             // Get our database connection
@@ -161,5 +160,40 @@ public class PersonDAO {
             catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
         }
     }
+    public static void updatePerson(Person person){
+        // Declare our variables
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            // Get our database connection
+            conn = DBHelper.getConnection();
+
+            String sql = "update person set first=?, last=?, phone=?, email=?, birthday=? where id=?";
+
+            stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, person.getFirst());
+            stmt.setString(2, person.getLast());
+            stmt.setString(3, person.getPhone());
+            stmt.setString(4, person.getEmail());
+            stmt.setString(5, person.getBirthday());
+            stmt.setInt(6, person.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        } finally {
+            try { if(stmt != null) stmt.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+
+            try { if(conn != null) conn.close(); }
+            catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
+    }
+
 
 }

@@ -17,8 +17,8 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         // Get the data passed in from the request string
-        String sessionKey = request.getParameter("sessionKey");
-        String sessionValue = request.getParameter("sessionValue");
+        String sessionKey = "loginId";
+        String sessionValue = request.getParameter("loginId");
 
         // Get a session object so we can get/set items in our session.
         // This will automatically create a JSESSIONID cookie for us.

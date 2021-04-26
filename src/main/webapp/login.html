@@ -45,22 +45,21 @@
 </nav>
 
 <div class="container">
-    <h1>Session Demo</h1>
-    <h2>Set Session</h2>
+    <h1>Login Demo</h1>
+    <h2>Login</h2>
 
     <div>
-        <input type="text" id="sessionKey" placeholder="Session Key">
-        <input type="text" id="sessionValue" placeholder="Session Value">
+        <input type="text" id="loginId" placeholder="Login Id">
     </div>
-    <label for="setSessionJava">Back-End Java SetSession</label>
-    <button id="setSessionJava">Go</button><br />
-
-    <h2>Clear Session</h2>
-    <button id="invalidateSession">Invalidate Session</button>
-
-    <h2>Get Session</h2>
-    <label for="getSessionJava">Back-End Java GetSession</label>
-    <button id="getSessionJava">Go</button><br />
+    <label for="login">Login</label>
+    <button id="login">Go</button><br />
+    <div id = "logout">
+        <h2>Log Out</h2>
+        <button id="invalidateSession">Log Out</button>
+    </div>
+    <h2>Welcome!</h2>
+    <label for="getLogin">Get login info</label>
+    <button id="getLogin">Go</button><br />
 
     <pre id="getSessionResult">
     </pre>

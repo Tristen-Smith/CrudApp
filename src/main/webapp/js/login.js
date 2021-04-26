@@ -4,11 +4,10 @@ function login() {
     let url = "api/login_servlet";
 
     // Grab data from the HTML form
-    let sessionKey = $("#sessionKey").val();
-    let sessionValue = $("#sessionValue").val();
+    let loginId = $("#loginId").val();
 
     // Create a JSON request based on that data
-    let dataToServer = {sessionKey : sessionKey, sessionValue : sessionValue};
+    let dataToServer = {loginId : loginId};
 
     // Post
     $.post(url, dataToServer, function (dataFromServer) {
@@ -16,8 +15,8 @@ function login() {
         console.log("Finished calling servlet.");
         console.log(dataFromServer);
         // Clear the form
-        $("#sessionKey").val("");
-        $("#sessionValue").val("");
+        $("#loginId").val("");
+        getLogin();
     });
 }
 
@@ -30,18 +29,26 @@ function getLogin() {
         console.log("Finished calling servlet.");
         console.log(dataFromServer);
         // Update the HTML with our result
-        $('#getSessionResult').html(dataFromServer)
+        if(dataFromServer === "null"){
+            $('#getSessionResult').html("You are not currently logged in.");
+            $('#logout').hide();
+        }
+        else{
+            $('#getSessionResult').html("You are logged in as " + dataFromServer + ".");
+            $('#logout').show();
+        }
     });
 }
 
 // This method calls the servlet that invalidates our session
 function invalidateSessionButton() {
 
-    let url = "api/invalidate_session_servlet";
+    let url = "api/logout_servlet";
 
     $.post(url, null, function (dataFromServer) {
         console.log("Finished calling servlet.");
         console.log(dataFromServer);
+        getLogin();
     });
 }
 
@@ -54,3 +61,5 @@ button.on("click", login);
 
 button = $('#invalidateSession');
 button.on("click", invalidateSessionButton);
+
+getLogin();
